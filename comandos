@@ -1,0 +1,10 @@
+* 1º Passo: Subir um cluster k8s no EKS na AWS
+eksctl create cluster --name k8sigtironcato --managed --instance-types=m5.large --spot --nodes-min=2 --nodes-max=4 --region=us-east-1 --alb-ingress-access --node-private-networking --full-ecr-access --nodegroup-name=ng-k8sroncatoigti --color=fabulous
+
+* 2º Passo: Gerar o arquivo .yaml com as configurações do Airflow que estão no repositorio heml do mesmo
+helm show values apache-airflow/airflow > airflow/myvalues.yaml
+
+* 3º Passo: Ajustar o arquivo myvalues.yaml com o bucket S3 na AWS para guardar os log do Airflow e com a conta Git que irá conter as DAGS
+
+* 4º Passo: Subir o Airflow do cluster k8s no EKS
+helm install airflow apache-airflow/airflow -f airflow/myvalues.yaml -n airflow --debug
